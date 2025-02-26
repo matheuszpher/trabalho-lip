@@ -1,3 +1,10 @@
+# Estoque - Universidade Federal do Ceará
+
+## Fluxo do rotas:
+
+![Fluxo do sistema](fluxo.png)
+
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
