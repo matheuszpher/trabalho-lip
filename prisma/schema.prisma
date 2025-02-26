@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+enum MovimentacaoTipo {
+  ENTRADA
+  SAIDA
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  email String @unique
+  name String
+  lastName String
+  password String
+  role Role
+  empresaId Int?
+  empresa Empresa? @relation(fields: [empresaId], references: [id])
+}
+
+model Empresa {
+  id Int @id @default(autoincrement())
+  name String
+  CNPJ String
+  email String
+
+  users User[]
+  estoques Estoque[]
+}
+
+model Estoque {
+  id Int @id @default(autoincrement())
+  name String
+  descricao String
+  empresaId Int?
+  empresa Empresa? @relation(fields: [empresaId], references: [id])
+
+  items Item[]
+}
+
+model Item {
+  id Int @id @default(autoincrement())
+  nome String
+  descricao String
+  quantidade Int
+  preco Decimal @db.Decimal(10, 2)
+  estoqueId Int?
+  estoque Estoque? @relation(fields: [estoqueId], references: [id])
+
+  movimentacoes Movimentacao[]
+}
+
+model Movimentacao {
+  id Int @id @default(autoincrement())
+  tipo MovimentacaoTipo
+  quantidade Int
+  data DateTime
+  itemId Int?
+  item Item? @relation(fields: [itemId], references: [id])
+}
